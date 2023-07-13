@@ -1,6 +1,6 @@
 # React route manager for [react-router](https://reactrouter.com/)
 
-Define and manager application url's in one place.
+Define and manage application url's in one place.
 
 ![npm](https://img.shields.io/npm/v/@lomray/react-route-manager)
 ![GitHub](https://img.shields.io/github/license/Lomray-Software/react-route-manager)
