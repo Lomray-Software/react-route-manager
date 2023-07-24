@@ -39,17 +39,11 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   protected readonly domain?: string;
 
   /**
-   * Service params
-   */
-  protected readonly params: Omit<IRouterServiceParams<TRoutesConfig>, 'routes'>;
-
-  /**
    * @constructor
    */
-  constructor({ routes, domain, ...params }: IRouterServiceParams<TRoutesConfig>) {
+  constructor({ routes, domain }: IRouterServiceParams<TRoutesConfig>) {
     this.domain = domain;
     this.routes = routes;
-    this.params = params;
   }
 
   /**
@@ -80,6 +74,21 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   }
 
   /**
+   * Return routes
+   */
+  public getRoutes<TKey extends TRouteKeys<TRoutesConfig>>(route?: TKey): TRoutesConfig {
+    let { routes } = this;
+
+    if (route) {
+      routes = (route as string)
+        .split('.')
+        .reduce((res, key) => res?.[key]?.children ?? {}, routes) as TRoutesConfig;
+    }
+
+    return routes;
+  }
+
+  /**
    * Generate route url with params
    */
   public makeURL = <TKey extends TRouteKeys<TRoutesConfig>>(
@@ -98,6 +107,28 @@ class Manager<TRoutesConfig extends TRouterConfig> {
    */
   public path = <TKey extends TRouteKeys<TRoutesConfig>>(route: TKey, isFullPath = false): string =>
     this.getRouteUrl(route as string, isFullPath);
+
+  /**
+   * Get static app URLs (without params)
+   */
+  public getAllStaticURLs<TKey extends TRouteKeys<TRoutesConfig>>(route?: TKey): string[] {
+    const result: string[] = [];
+    const routes = this.getRoutes(route);
+
+    Object.entries(routes).forEach(([key, value]) => {
+      const routeKey = [route, key].filter(Boolean).join('.') as TRouteKeys<TRoutesConfig>;
+
+      if (value.url && !value.params) {
+        result.push(this.makeURL(routeKey));
+      }
+
+      if (value.children) {
+        result.push(...this.getAllStaticURLs(routeKey));
+      }
+    });
+
+    return result;
+  }
 }
 
 export default Manager;
