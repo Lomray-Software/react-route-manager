@@ -38,7 +38,16 @@ const manager = new Manager({
       url: '/details',
       children: {
         user: {
-          url: '/user/:id',
+          url: '/user/:id', // If main page url is /details, children is /user/id
+          params: { id: '' }, // id required param
+        },
+      },
+    },
+    blog: {
+      url: '/blog',
+      children: {
+        details: {
+          url: '/:id', // If main page url is /blog, children is /blog/id
           params: { id: '' }, // id required param
         },
       },
