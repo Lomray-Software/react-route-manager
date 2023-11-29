@@ -87,6 +87,8 @@ class Manager<TRoutesConfig extends TRouterConfig> {
 
     if (!hasLeadingSlash && url.startsWith('/')) {
       return url.substring(1);
+    } else if (hasLeadingSlash && !url.startsWith('/')) {
+      return `/${url}`;
     }
 
     return url;
@@ -116,10 +118,13 @@ class Manager<TRoutesConfig extends TRouterConfig> {
     { hasDomain = false }: IRouterUrlOptions = {},
   ): string => {
     const path = this.getRouteUrl(route as string, { isFullPath: true });
-    const url = generatePath(path, params);
-    const withPrefix = this.prefix ? `/${this.prefix}${url}` : url;
+    let url = generatePath(path, params);
 
-    return hasDomain && this.domain ? `${this.domain}${withPrefix}` : withPrefix;
+    if (this.prefix) {
+      url = `/${this.prefix}${url === '/' ? '' : url}`;
+    }
+
+    return hasDomain && this.domain ? `${this.domain}${url}` : url;
   };
 
   /**
