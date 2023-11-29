@@ -73,8 +73,8 @@ type TRouteParamsValues<
       : never
     : never
   : TConfig[TKey]['params'] extends Record<string, any>
-  ? TConfig[TKey]['params']
-  : never;
+    ? TConfig[TKey]['params']
+    : never;
 
 type TRouteKeys<TConfig extends TRouterConfig> = keyof {
   [P in keyof TConfig as P extends string ? TRouteKeysDeep<TConfig, P> : never]: any;
@@ -85,4 +85,16 @@ type TRouteParams<
   TKey extends TRouteKeys<TConfig>,
 > = TRouteParamsType<TRouteParamsValues<TConfig, TKey>>;
 
-export type { IRouterServiceParams, IRouterUrlOptions, TRouterConfig, TRouteKeys, TRouteParams };
+interface IRouteUrlOptions {
+  isFullPath?: boolean;
+  hasLeadingSlash?: boolean;
+}
+
+export type {
+  IRouterServiceParams,
+  IRouterUrlOptions,
+  TRouterConfig,
+  TRouteKeys,
+  TRouteParams,
+  IRouteUrlOptions,
+};

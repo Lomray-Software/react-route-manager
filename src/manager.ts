@@ -5,6 +5,7 @@ import type {
   IRouterUrlOptions,
   TRouteKeys,
   TRouteParams,
+  IRouteUrlOptions,
 } from './interfaces';
 
 /**
@@ -49,7 +50,10 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   /**
    * Get route full url
    */
-  protected getRouteUrl(key: string, isFullPath = false): string {
+  protected getRouteUrl(
+    key: string,
+    { isFullPath = false, hasLeadingSlash = true }: IRouteUrlOptions = {},
+  ): string {
     const { urls } = key.split('.').reduce(
       (res, routeKey) => {
         if (!res?.routes || !routeKey) {
@@ -66,11 +70,13 @@ class Manager<TRoutesConfig extends TRouterConfig> {
       { routes: this.routes, urls: [] },
     );
 
-    if (!isFullPath) {
-      urls.slice(-1);
+    const url = (!isFullPath ? urls.slice(-1) : urls).join('');
+
+    if (!hasLeadingSlash && url.startsWith('/')) {
+      return url.substring(1);
     }
 
-    return urls.join('');
+    return url;
   }
 
   /**
@@ -96,7 +102,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
     params?: TRouteParams<TRoutesConfig, TKey>,
     { hasDomain = false }: IRouterUrlOptions = {},
   ): string => {
-    const path = this.getRouteUrl(route as string, true);
+    const path = this.getRouteUrl(route as string, { isFullPath: true });
     const url = generatePath(path, params);
 
     return hasDomain && this.domain ? `${this.domain}${url}` : url;
@@ -105,8 +111,10 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   /**
    * Get URL path for router
    */
-  public path = <TKey extends TRouteKeys<TRoutesConfig>>(route: TKey, isFullPath = false): string =>
-    this.getRouteUrl(route as string, isFullPath);
+  public path = <TKey extends TRouteKeys<TRoutesConfig>>(
+    route: TKey,
+    { isFullPath = false, hasLeadingSlash = false }: IRouteUrlOptions = {},
+  ): string => this.getRouteUrl(route as string, { isFullPath, hasLeadingSlash });
 
   /**
    * Get static app URLs (without params)
