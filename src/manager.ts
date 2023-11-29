@@ -40,11 +40,24 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   protected readonly domain?: string;
 
   /**
+   * Url prefix (e.g. language code)
+   */
+  protected prefix?: string;
+
+  /**
    * @constructor
    */
-  constructor({ routes, domain }: IRouterServiceParams<TRoutesConfig>) {
+  constructor({ routes, domain, prefix }: IRouterServiceParams<TRoutesConfig>) {
     this.domain = domain;
     this.routes = routes;
+    this.prefix = prefix;
+  }
+
+  /**
+   * Set url prefix
+   */
+  public setPrefix(prefix?: string): void {
+    this.prefix = prefix;
   }
 
   /**
@@ -104,8 +117,9 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   ): string => {
     const path = this.getRouteUrl(route as string, { isFullPath: true });
     const url = generatePath(path, params);
+    const withPrefix = this.prefix ? `/${this.prefix}${url}` : url;
 
-    return hasDomain && this.domain ? `${this.domain}${url}` : url;
+    return hasDomain && this.domain ? `${this.domain}${withPrefix}` : withPrefix;
   };
 
   /**

@@ -1,6 +1,7 @@
 interface IRouterServiceParams<TRoutesConfig extends TRouterConfig> {
   routes: TRoutesConfig;
   domain?: string;
+  prefix?: string;
 }
 
 type TRouterConfig = {
