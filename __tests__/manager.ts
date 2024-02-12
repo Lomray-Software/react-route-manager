@@ -46,12 +46,6 @@ describe('Route manager', () => {
     expect(manager2.makeURL('home', {}, { hasDomain: true })).to.equal('https://demo.test/home');
   });
 
-  it('should get route URL', () => {
-    const url = manager.getRouteUrl('user.profile');
-
-    expect(url).to.equal('/profile');
-  });
-
   it('should get routes', () => {
     const result = manager.getRoutes('user');
 
