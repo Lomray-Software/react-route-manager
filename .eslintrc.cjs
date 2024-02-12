@@ -3,6 +3,7 @@ module.exports = {
   extends: [
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:jsx-a11y/recommended',
     '@lomray/eslint-config'
   ],
   ignorePatterns: ['/*.*'],
@@ -30,6 +31,8 @@ module.exports = {
     'unicorn/import-index': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     'no-await-in-loop': 'off',
+    '@typescript-eslint/no-for-in-array': 'off',
+    'unicorn/no-nested-ternary': 'off',
     'prettier/prettier': [
       'error',
       {

@@ -1,15 +1,16 @@
 import typescript from 'rollup-plugin-ts';
-import ttypescript from 'ttypescript';
 import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
+
+const dest = 'lib';
 
 export default {
   input: [
     'src/index.ts',
   ],
   output: {
-    dir: 'lib',
-    format: 'cjs',
+    dir: dest,
+    format: 'es',
     sourcemap: true,
     preserveModules: true,
     preserveModulesRoot: 'src',
@@ -18,16 +19,17 @@ export default {
   external: ['react-router'],
   plugins: [
     typescript({
-      typescript: ttypescript,
       tsconfig: resolvedConfig => ({
         ...resolvedConfig,
         declaration: true,
+        importHelpers: true,
       }),
     }),
     terser(),
     copy({
       targets: [
-        { src: 'package.json', dest: 'lib' },
+        { src: 'package.json', dest: dest },
+        { src: 'README.md', dest: dest },
       ]
     })
   ],
