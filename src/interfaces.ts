@@ -63,19 +63,23 @@ type TRouteParamsType<TObj extends Record<string, any>> = TNonEmptyParams<{
       : IsEnum<TObj[field]>;
   }>;
 
+// @ts-ignore
+type MergeObjects<T, TU> = { [K in keyof T | keyof TU]: K extends keyof T ? T[K] : TU[K] };
+
 type TRouteParamsValues<
   TConfig extends TRouterConfig,
   TKey extends TRouteKeys<TConfig>,
 > = TKey extends `${infer TPrefix}.${infer TPostfix}`
   ? TPostfix extends string
     ? TConfig[TPrefix]['children'] extends TRouterConfig
-      ? // @ts-ignore
-        TRouteParamsValues<TConfig[TPrefix]['children'], TPostfix>
+      ? MergeObjects<
+          // @ts-ignore
+          TRouteParamsValues<TConfig[TPrefix]['children'], TPostfix>,
+          TConfig[TPrefix]['params']
+        >
       : never
     : never
-  : TConfig[TKey]['params'] extends Record<string, any>
-    ? TConfig[TKey]['params']
-    : never;
+  : MergeObjects<TConfig[TKey]['params'], object>;
 
 type TRouteKeys<TConfig extends TRouterConfig> = keyof {
   [P in keyof TConfig as P extends string ? TRouteKeysDeep<TConfig, P> : never]: any;
