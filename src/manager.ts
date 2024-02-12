@@ -149,7 +149,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
         result.push(this.makeURL(routeKey));
       }
 
-      if (value.children) {
+      if (value.children && !value.params) {
         result.push(...this.getAllStaticURLs(routeKey));
       }
     });
