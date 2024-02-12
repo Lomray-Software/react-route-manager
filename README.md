@@ -100,13 +100,13 @@ const manager = new Manager({
     user: {
       url: '/user',
       params: {
-          // required
+          // required string
           id: '',
           // required union
           id: '' as 'aaa' | 'dddd',
           // required enum
           id: DD,
-          // optional
+          // optional string
           id: undefined,
           // optional union
           id: undefined as 'aaa' | 'dddd' | undefined,
