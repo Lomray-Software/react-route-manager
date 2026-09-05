@@ -121,3 +121,5 @@ for (const [resolution, module] of [
 }
 writeFileSync(join(scratch, 'timings.json'), JSON.stringify(timings, null, 2));
 console.log(`Package fixtures and timings: ${scratch}`);
+
+console.log(run(process.execPath, [join(root, 'scripts/check-readme.mjs'), scratch], root));
