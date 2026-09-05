@@ -7,11 +7,20 @@ on:
 
 jobs:
   check:
-    name: Check PR
+    name: Check PR (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Keep the first entry aligned with .nvmrc.
+        node: ['18.19.0', '22.23.2']
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
 
       - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
@@ -32,13 +41,17 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: coverage-lcov
+          name: coverage-lcov-${{ matrix.node }}
           path: coverage
 
       - name: Build
         run: |
           npm pkg delete scripts.prepare
-          npm run build -- --throw-warnings
+          npm run build -- --failAfterWarnings
+
+      - name: Check packed declarations
+        if: matrix.node == '22.23.2'
+        run: npm run test:package
 
   sonarcube:
     runs-on: ubuntu-latest
@@ -54,7 +67,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: coverage-lcov
+          name: coverage-lcov-22.23.2
           path: coverage
 
       - uses: SonarSource/sonarcloud-github-action@master

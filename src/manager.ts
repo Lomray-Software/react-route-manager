@@ -7,7 +7,7 @@ import type {
   IRouteUrlOptions,
   TChildrenAt,
   TURLArgs,
-} from './interfaces';
+} from './interfaces.js';
 
 /**
  * @example
