@@ -2,10 +2,11 @@ import { generatePath } from 'react-router';
 import type {
   TRouterConfig,
   IRouterServiceParams,
-  IRouterUrlOptions,
   TRouteKeys,
   TRouteParams,
   IRouteUrlOptions,
+  TChildrenAt,
+  TURLArgs,
 } from './interfaces';
 
 /**
@@ -67,7 +68,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
     key: string,
     { isFullPath = false, hasLeadingSlash = true }: IRouteUrlOptions = {},
   ): string {
-    const { urls } = key.split('.').reduce(
+    const { urls } = key.split('.').reduce<{ routes?: TRouterConfig; urls: string[] }>(
       (res, routeKey) => {
         if (!res?.routes || !routeKey) {
           return res;
@@ -98,16 +99,14 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   /**
    * Return routes
    */
-  public getRoutes<TKey extends TRouteKeys<TRoutesConfig>>(route?: TKey): TRoutesConfig {
-    let { routes } = this;
-
-    if (route) {
-      routes = (route as string)
-        .split('.')
-        .reduce((res, key) => res?.[key]?.children ?? {}, routes) as TRoutesConfig;
-    }
-
-    return routes;
+  public getRoutes(): TRoutesConfig;
+  public getRoutes<TKey extends TRouteKeys<TRoutesConfig>>(
+    route: TKey,
+  ): TChildrenAt<TRoutesConfig, TKey>;
+  public getRoutes(route?: string): TRouterConfig {
+    return route
+      ? route.split('.').reduce<TRouterConfig>((res, key) => res[key]?.children ?? {}, this.routes)
+      : this.routes;
   }
 
   /**
@@ -115,18 +114,23 @@ class Manager<TRoutesConfig extends TRouterConfig> {
    */
   public makeURL = <TKey extends TRouteKeys<TRoutesConfig>>(
     route: TKey,
-    params?: TRouteParams<TRoutesConfig, TKey>,
-    { hasDomain = false }: IRouterUrlOptions = {},
+    ...[params, { hasDomain = false } = {}]: TURLArgs<TRouteParams<TRoutesConfig, TKey>>
   ): string => {
     const path = this.getRouteUrl(route as string, { isFullPath: true });
-    let url = generatePath(path, params);
 
+    return this.formatURL(generatePath(path, params), hasDomain);
+  };
+
+  /**
+   * Apply the configured prefix and domain to a generated URL.
+   */
+  private formatURL(url: string, hasDomain = false): string {
     if (this.prefix) {
       url = `/${this.prefix}${url === '/' ? '' : url}`;
     }
 
     return hasDomain && this.domain ? `${this.domain}${url}` : url;
-  };
+  }
 
   /**
    * Get URL path for router
@@ -141,7 +145,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
    */
   public getAllStaticURLs<TKey extends TRouteKeys<TRoutesConfig>>(route?: TKey): string[] {
     const result: string[] = [];
-    const routes = this.getRoutes(route);
+    const routes: TRouterConfig = route === undefined ? this.getRoutes() : this.getRoutes(route);
 
     Object.entries(routes).forEach(([key, value]) => {
       const routeKey = [route, key].filter(Boolean).join('.') as TRouteKeys<TRoutesConfig>;
@@ -151,7 +155,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
         .some((segment) => segment.startsWith(':') || segment === '*');
 
       if (value.url && !hasParams) {
-        result.push(this.makeURL(routeKey));
+        result.push(this.formatURL(generatePath(fullPath)));
       }
 
       if (value.children) {
