@@ -112,10 +112,10 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   /**
    * Generate route url with params
    */
-  public makeURL = <TKey extends TRouteKeys<TRoutesConfig>>(
+  public makeURL: <TKey extends TRouteKeys<TRoutesConfig>>(
     route: TKey,
-    ...[params, { hasDomain = false } = {}]: TURLArgs<TRouteParams<TRoutesConfig, TKey>>
-  ): string => {
+    ...args: TURLArgs<TRouteParams<TRoutesConfig, TKey>>
+  ) => string = (route, ...[params, { hasDomain = false } = {}]) => {
     const path = this.getRouteUrl(route as string, { isFullPath: true });
 
     return this.formatURL(generatePath(path, params), hasDomain);
@@ -135,10 +135,11 @@ class Manager<TRoutesConfig extends TRouterConfig> {
   /**
    * Get URL path for router
    */
-  public path = <TKey extends TRouteKeys<TRoutesConfig>>(
+  public path: <TKey extends TRouteKeys<TRoutesConfig>>(
     route: TKey,
-    { isFullPath = false, hasLeadingSlash = false }: IRouteUrlOptions = {},
-  ): string => this.getRouteUrl(route as string, { isFullPath, hasLeadingSlash });
+    options?: IRouteUrlOptions,
+  ) => string = (route, { isFullPath = false, hasLeadingSlash = false } = {}) =>
+    this.getRouteUrl(route as string, { isFullPath, hasLeadingSlash });
 
   /**
    * Get static app URLs (without params)
