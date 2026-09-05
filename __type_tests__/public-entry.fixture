@@ -1,0 +1,13 @@
+import { Manager } from '@lomray/react-route-manager';
+import type { IRouterServiceParams, IRouterUrlOptions, TRouterConfig, TRouteKeys, TRouteParams, IRouteUrlOptions } from '@lomray/react-route-manager';
+import DirectManager from '@lomray/react-route-manager/manager.js';
+const routes = { user: { url:'/user/:id',params:{id:''},children:{profile:{url:'/profile'}}}} satisfies TRouterConfig;
+const config: IRouterServiceParams<typeof routes> = {routes};
+const manager = new Manager(config);
+const key: TRouteKeys<typeof routes> = 'user.profile';
+const params: TRouteParams<typeof routes, typeof key> = {id:'42'};
+const urlOptions: IRouterUrlOptions = {hasDomain:true};
+const pathOptions: IRouteUrlOptions = {isFullPath:true};
+const url: string = manager.makeURL(key,params,urlOptions);
+const path: string = new DirectManager(config).path(key,pathOptions);
+void [url,path];
