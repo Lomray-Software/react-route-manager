@@ -83,7 +83,8 @@ class Manager<TRoutesConfig extends TRouterConfig> {
       { routes: this.routes, urls: [] },
     );
 
-    const url = (!isFullPath ? urls.slice(-1) : urls).join('');
+    // Collapse separators at fragment boundaries while preserving the final slash.
+    const url = (!isFullPath ? urls.slice(-1) : urls).join('/').replace(/\/{2,}/g, '/');
 
     if (!hasLeadingSlash && url.startsWith('/')) {
       return url.substring(1);

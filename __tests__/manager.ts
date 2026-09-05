@@ -37,6 +37,25 @@ describe('Route manager', () => {
     expect(url).to.equal('/en');
   });
 
+  it('should separate relative child paths', () => {
+    const relative = new Manager({
+      routes: { parent: { url: '/parent', children: { child: { url: 'child' } } } },
+    });
+
+    expect(relative.makeURL('parent.child')).to.equal('/parent/child');
+    expect(relative.path('parent.child', { isFullPath: true })).to.equal('parent/child');
+  });
+
+  it('should collapse separators below the root', () => {
+    const root = new Manager({
+      routes: { home: { url: '/', children: { child: { url: '/child' } } } },
+    });
+
+    expect(root.makeURL('home.child')).to.equal('/child');
+    expect(root.path('home.child', { isFullPath: true })).to.equal('child');
+    expect(root.path('home.child', { isFullPath: true, hasLeadingSlash: true })).to.equal('/child');
+  });
+
   it('should make url with domain', () => {
     const manager2 = new Manager({
       routes: { home: { url: '/home' } },

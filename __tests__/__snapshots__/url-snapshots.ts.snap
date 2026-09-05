@@ -1,0 +1,463 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`URL compatibility snapshots captured before the audit fixes > README route params 1`] = `
+{
+  "user": {
+    "makeURL": "/user",
+    "path": "user",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "user",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/user",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "user",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/user",
+      },
+    ],
+  },
+}
+`;
+
+exports[`URL compatibility snapshots captured before the audit fixes > README usage (all four keys) 1`] = `
+{
+  "about": {
+    "makeURL": "/about",
+    "path": "about",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "about",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/about",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "about",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/about",
+      },
+    ],
+  },
+  "details": {
+    "makeURL": "/details",
+    "path": "details",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "details",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/details",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "details",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/details",
+      },
+    ],
+  },
+  "details.user": {
+    "makeURL": "/details/user/1",
+    "path": "user/:id",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "user/:id",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/user/:id",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "details/user/:id",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/details/user/:id",
+      },
+    ],
+  },
+  "home": {
+    "makeURL": "/",
+    "path": "",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/",
+      },
+    ],
+  },
+}
+`;
+
+exports[`URL compatibility snapshots captured before the audit fixes > existing trailing slashes 1`] = `
+{
+  "parent": {
+    "makeURL": "/parent",
+    "path": "parent",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "parent",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/parent",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "parent",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/parent",
+      },
+    ],
+  },
+  "parent.child": {
+    "makeURL": "/parent/child",
+    "path": "child/",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "child/",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/child/",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "parent/child/",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/parent/child/",
+      },
+    ],
+  },
+  "parent.index": {
+    "makeURL": "/parent",
+    "path": "",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "parent/",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/parent/",
+      },
+    ],
+  },
+  "trailing": {
+    "makeURL": "/trailing",
+    "path": "trailing/",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "trailing/",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/trailing/",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "trailing/",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/trailing/",
+      },
+    ],
+  },
+}
+`;
+
+exports[`URL compatibility snapshots captured before the audit fixes > template (all eight keys) 1`] = `
+{
+  "details": {
+    "makeURL": "/details",
+    "path": "details",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "details",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/details",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "details",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/details",
+      },
+    ],
+  },
+  "details.user": {
+    "makeURL": "/details/user/1",
+    "path": "user/:id",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "user/:id",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/user/:id",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "details/user/:id",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/details/user/:id",
+      },
+    ],
+  },
+  "errorBoundary": {
+    "makeURL": "/error-boundary",
+    "path": "error-boundary",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "error-boundary",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/error-boundary",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "error-boundary",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/error-boundary",
+      },
+    ],
+  },
+  "home": {
+    "makeURL": "/",
+    "path": "",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/",
+      },
+    ],
+  },
+  "nestedSuspense": {
+    "makeURL": "/nested-suspense",
+    "path": "nested-suspense",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "nested-suspense",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/nested-suspense",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "nested-suspense",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/nested-suspense",
+      },
+    ],
+  },
+  "notLazy": {
+    "makeURL": "/not-lazy",
+    "path": "not-lazy",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "not-lazy",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/not-lazy",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "not-lazy",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/not-lazy",
+      },
+    ],
+  },
+  "onlyClientPage": {
+    "makeURL": "/only-client-page",
+    "path": "only-client-page",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "only-client-page",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/only-client-page",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "only-client-page",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/only-client-page",
+      },
+    ],
+  },
+  "redirect": {
+    "makeURL": "/redirect-demo",
+    "path": "redirect-demo",
+    "variants": [
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": false,
+        "path": "redirect-demo",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": false,
+        "path": "/redirect-demo",
+      },
+      {
+        "hasLeadingSlash": false,
+        "isFullPath": true,
+        "path": "redirect-demo",
+      },
+      {
+        "hasLeadingSlash": true,
+        "isFullPath": true,
+        "path": "/redirect-demo",
+      },
+    ],
+  },
+}
+`;
