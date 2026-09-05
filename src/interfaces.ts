@@ -16,25 +16,41 @@ interface IRouterUrlOptions {
   hasDomain?: boolean;
 }
 
+/** Route keys include up to 16 segments, regardless of repeated names. */
+type TRouteKeys<
+  TConfig extends TRouterConfig,
+  TDepth extends unknown[] = [],
+> = TDepth['length'] extends 16
+  ? never
+  : {
+      [K in keyof TConfig & string]:
+        | K
+        | (TConfig[K] extends { children: infer TChildren extends TRouterConfig }
+            ? `${K}.${TRouteKeys<TChildren, [...TDepth, unknown]>}`
+            : never);
+    }[keyof TConfig & string];
+
+type TRouteAt<TConfig, TKey extends string> = TKey extends `${infer THead}.${infer TTail}`
+  ? THead extends keyof TConfig
+    ? TConfig[THead] extends { children: infer TChildren }
+      ? TRouteAt<TChildren, TTail>
+      : never
+    : never
+  : TKey extends keyof TConfig
+    ? TConfig[TKey]
+    : never;
+
+type TChildrenAt<TConfig, TKey extends string> =
+  TRouteAt<TConfig, TKey> extends {
+    children: infer TChildren extends TRouterConfig;
+  }
+    ? TChildren
+    : Record<string, never>;
+
 // eslint-disable-next-line @typescript-eslint/ban-types
-type TRouteKeysDeep<TE extends TRouterConfig, TP extends string, TExistKeys = {}> = TE[TP] extends {
-  children: TRouterConfig;
-}
-  ? TExistKeys extends { [key in TP]: any } // avoid infinite recursion
-    ? never
-    : keyof {
-        [PF in keyof TE[TP]['children'] as
-          | (PF extends string
-              ? // @ts-ignore
-                `${TP}.${TRouteKeysDeep<
-                  TE[TP]['children'],
-                  PF,
-                  { [key in TP | keyof TExistKeys]: any }
-                >}`
-              : never)
-          | TP]: any;
-      }
-  : TP;
+type TURLArgs<TParams> = {} extends TParams
+  ? [params?: TParams, options?: IRouterUrlOptions]
+  : [params: TParams, options?: IRouterUrlOptions];
 
 type OptionalFieldsOnly<T> = {
   [K in keyof T as T[K] extends infer TUndef
@@ -63,27 +79,22 @@ type TRouteParamsType<TObj extends Record<string, any>> = TNonEmptyParams<{
       : IsEnum<TObj[field]>;
   }>;
 
-// @ts-ignore
-type MergeObjects<T, TU> = { [K in keyof T | keyof TU]: K extends keyof T ? T[K] : TU[K] };
+type MergeObjects<T, TU> = {
+  [K in keyof T | keyof TU]: K extends keyof T ? T[K] : K extends keyof TU ? TU[K] : never;
+};
 
 type TRouteParamsValues<
   TConfig extends TRouterConfig,
-  TKey extends TRouteKeys<TConfig>,
+  TKey extends string,
 > = TKey extends `${infer TPrefix}.${infer TPostfix}`
-  ? TPostfix extends string
-    ? TConfig[TPrefix]['children'] extends TRouterConfig
-      ? MergeObjects<
-          // @ts-ignore
-          TRouteParamsValues<TConfig[TPrefix]['children'], TPostfix>,
-          TConfig[TPrefix]['params']
-        >
+  ? TPrefix extends keyof TConfig
+    ? TConfig[TPrefix] extends { children: infer TChildren extends TRouterConfig }
+      ? MergeObjects<TRouteParamsValues<TChildren, TPostfix>, TConfig[TPrefix]['params']>
       : never
     : never
-  : MergeObjects<TConfig[TKey]['params'], object>;
-
-type TRouteKeys<TConfig extends TRouterConfig> = keyof {
-  [P in keyof TConfig as P extends string ? TRouteKeysDeep<TConfig, P> : never]: any;
-};
+  : TKey extends keyof TConfig
+    ? MergeObjects<TConfig[TKey]['params'], object>
+    : never;
 
 type TRouteParams<
   TConfig extends TRouterConfig,
@@ -102,4 +113,6 @@ export type {
   TRouteKeys,
   TRouteParams,
   IRouteUrlOptions,
+  TChildrenAt,
+  TURLArgs,
 };

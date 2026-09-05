@@ -33,7 +33,8 @@
     "lint:format": "eslint --fix --ext \".ts,.tsx\" \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
     "test": "vitest run",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:types": "tsc --project __type_tests__/tsconfig.json"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.6.0",
