@@ -109,4 +109,39 @@ describe('Route manager', () => {
 
     expect(result).to.deep.equal(['/details/example']);
   });
+
+  it('should exclude descendants of a selected parameterized parent', () => {
+    expect(manager.getAllStaticURLs('user')).to.deep.equal([]);
+  });
+
+  it('should enumerate static patterns regardless of params metadata', () => {
+    const staticRoutes = new Manager({
+      routes: {
+        about: { url: '/about', params: {} },
+        parent: {
+          url: '/parent',
+          params: { unused: '' },
+          children: { child: { url: '/child' } },
+        },
+      },
+    });
+
+    expect(staticRoutes.getAllStaticURLs()).to.deep.equal(['/about', '/parent', '/parent/child']);
+    expect(staticRoutes.getAllStaticURLs('parent')).to.deep.equal(['/parent/child']);
+  });
+
+  it('should exclude required, optional and splat patterns without metadata', () => {
+    const dynamic = new Manager({
+      routes: {
+        required: { url: '/:id', children: { child: { url: '/child' } } },
+        optional: { url: '/:id?', children: { child: { url: '/child' } } },
+        splat: { url: '/*', children: { child: { url: '/child' } } },
+      },
+    });
+
+    expect(dynamic.getAllStaticURLs()).to.deep.equal([]);
+    expect(dynamic.getAllStaticURLs('required')).to.deep.equal([]);
+    expect(dynamic.getAllStaticURLs('optional')).to.deep.equal([]);
+    expect(dynamic.getAllStaticURLs('splat')).to.deep.equal([]);
+  });
 });

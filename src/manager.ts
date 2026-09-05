@@ -145,12 +145,16 @@ class Manager<TRoutesConfig extends TRouterConfig> {
 
     Object.entries(routes).forEach(([key, value]) => {
       const routeKey = [route, key].filter(Boolean).join('.') as TRouteKeys<TRoutesConfig>;
+      const fullPath = this.getRouteUrl(routeKey as string, { isFullPath: true });
+      const hasParams = fullPath
+        .split('/')
+        .some((segment) => segment.startsWith(':') || segment === '*');
 
-      if (value.url && !value.params) {
+      if (value.url && !hasParams) {
         result.push(this.makeURL(routeKey));
       }
 
-      if (value.children && !value.params) {
+      if (value.children) {
         result.push(...this.getAllStaticURLs(routeKey));
       }
     });
