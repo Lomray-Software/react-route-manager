@@ -20,11 +20,17 @@ The package is distributed using [npm](https://www.npmjs.com/), the node package
 npm i --save @lomray/react-route-manager
 ```
 
+The TypeScript declarations require TypeScript 5.0 or newer; supported React Router versions are `>=6.12.1`.
+
 ## Usage
+
+The examples use React Router 7 or later. With React Router 6, import `Link` from
+`react-router-dom` and `RouteObject` from `react-router` instead.
+The `@pages/*` modules below are supplied by your application and export route components.
 
 ```typescript jsx
 import { Manager } from '@lomray/react-route-manager';
-import type { RouteObject } from 'react-router';
+import { Link, type RouteObject } from 'react-router';
 
 /**
  * Application URL manager
@@ -84,10 +90,10 @@ const routes: RouteObject[] = [
 const MyComponent = () => {
   return (
     <>
-      <Link to{manager.makeURL('home')}>Home page</Link>
-      <Link to{manager.makeURL('about')}>About page</Link>
-      <Link to{manager.makeURL('details')}>Details page</Link>
-      <Link to{manager.makeURL('details.user', { id: 1 })}>User page</Link>
+      <Link to={manager.makeURL('home')}>Home page</Link>
+      <Link to={manager.makeURL('about')}>About page</Link>
+      <Link to={manager.makeURL('details')}>Details page</Link>
+      <Link to={manager.makeURL('details.user', { id: '1' })}>User page</Link>
     </>
   )
 }
@@ -95,28 +101,34 @@ const MyComponent = () => {
 
 ## Route params
 ```typescript
+import { Manager } from '@lomray/react-route-manager';
+
+enum DD { First = 'first', Second = 'second' }
+
 const manager = new Manager({
   routes: {
     user: {
-      url: '/user',
+      url: '/user/:id/:kind/:status/:name?/:next?/:optionalStatus?',
       params: {
-          // required string
-          id: '',
-          // required union
-          id: '' as 'aaa' | 'dddd',
-          // required enum
-          id: DD,
-          // optional string
-          id: undefined,
-          // optional union
-          id: undefined as 'aaa' | 'dddd' | undefined,
-          // optional enum
-          id: undefined as DD | undefined
-      }
-    }
-  }
+        id: '', // required string
+        kind: '' as 'aaa' | 'dddd', // required union
+        status: DD, // required enum
+        name: undefined, // optional string
+        next: undefined as 'aaa' | 'dddd' | undefined, // optional union
+        optionalStatus: undefined as DD | undefined, // optional enum
+      },
+    },
+  },
 });
+
+manager.makeURL('user', { id: '1', kind: 'aaa', status: DD.First });
+// '/user/1/aaa/first'
 ```
+
+Required parameters must be supplied, including parameters inherited from parent routes.
+Routes with only optional parameters can omit the parameter object.
+Typed route keys support up to 16 segments. Repeated segment names are allowed, and a
+route with `children: {}` still has its own key.
 
 Explore [demo app](https://github.com/Lomray-Software/vite-template) to more understand.
 
