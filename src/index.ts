@@ -1,3 +1,3 @@
-export { default as Manager } from './manager';
+export { default as Manager } from './manager.js';
 
-export * from './interfaces';
+export type * from './interfaces.js';

@@ -4,7 +4,6 @@
     "allowUnreachableCode": false,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -20,7 +19,7 @@
       "webworker"
     ],
     "module": "ES2022",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "target": "ESNext",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -32,8 +31,7 @@
     "strict": false,
     "pretty": true,
     "useDefineForClassFields": true,
-    "jsx": "react",
-    "baseUrl": "."
+    "jsx": "react"
   },
   "exclude": [
     "node_modules",

@@ -23,6 +23,22 @@ const pack = JSON.parse(
     join(root, 'lib'),
   ),
 )[0];
+const files = new Set(pack.files.map(({ path }) => path));
+
+// Preserve public entries and package documents; internal chunk names may change.
+for (const file of [
+  'index.js',
+  'index.d.ts',
+  'manager.js',
+  'package.json',
+  'README.md',
+  'LICENSE',
+]) {
+  assert.ok(files.has(file), `Missing public package file: ${file}`);
+}
+assert.ok(files.has('interfaces.d.ts'), 'TypeScript must emit interfaces.d.ts naturally.');
+console.log('PASS package layout: public entries present; internal chunk names may change');
+console.log('PASS natural declaration output: interfaces.d.ts');
 writeFileSync(join(scratch, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
 console.log(
   run('npm', [
@@ -38,6 +54,14 @@ console.log(
     '@types/react-dom@19.2.7',
   ]),
 );
+const manifest = JSON.parse(
+  readFileSync(join(scratch, 'node_modules/@lomray/react-route-manager/package.json'), 'utf8'),
+);
+assert.deepEqual(
+  [manifest.main, manifest.types, manifest.type, manifest.peerDependencies],
+  ['index.js', 'index.d.ts', 'module', { 'react-router': '>=6.12.1' }],
+);
+console.log('PASS unchanged entry points and peer range');
 const declarations = readFileSync(
   join(scratch, 'node_modules/@lomray/react-route-manager/manager.d.ts'),
   'utf8',
