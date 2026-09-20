@@ -38,7 +38,7 @@
     "test:package": "node scripts/check-package.mjs"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.0",
+    "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^18.6.0",
     "@lomray/eslint-config": "^4.0.1",
     "@lomray/prettier-config": "^2.0.1",
