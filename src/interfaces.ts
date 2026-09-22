@@ -47,7 +47,7 @@ type TChildrenAt<TConfig, TKey extends string> =
     ? TChildren
     : Record<string, never>;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- `{}` detects an all-optional params type.
 type TURLArgs<TParams> = {} extends TParams
   ? [params?: TParams, options?: IRouterUrlOptions]
   : [params: TParams, options?: IRouterUrlOptions];
@@ -61,7 +61,7 @@ type OptionalFieldsOnly<T> = {
 type IsEnum<T> = T extends object ? T[keyof T] : T;
 type IsEmptyObject<TObj> = keyof TObj extends [never] ? true : false;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- `{}` is the "no params" default.
 type TNonEmptyParams<TParams, TDefault = {}> = TParams extends infer TO
   ? IsEmptyObject<TO> extends true
     ? TDefault
