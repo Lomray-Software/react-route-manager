@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
 
@@ -10,16 +10,31 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const scratch = mkdtempSync(join(tmpdir(), 'route-manager-package-'));
 const env = { ...process.env };
 delete env.NO_COLOR;
-const run = (command, args, cwd = scratch) => {
-  console.log(`$ ${command} ${args.join(' ')}`);
-  return execFileSync(command, args, { cwd, env, encoding: 'utf8', timeout: 120_000 });
+
+/**
+ * Resolve npm from the active npm invocation or the current Node installation.
+ */
+const npmCli =
+  process.env.npm_execpath ??
+  join(dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js');
+
+/**
+ * Run scripts with the current Node binary without resolving executables through PATH.
+ */
+const run = (args, cwd = scratch) => {
+  console.log(`$ ${process.execPath} ${args.join(' ')}`);
+  return execFileSync(process.execPath, args, { cwd, env, encoding: 'utf8', timeout: 120_000 });
 };
+
+/**
+ * Match release preparation without running Husky from the packed directory.
+ */
+run([npmCli, 'pkg', 'delete', 'scripts.prepare'], join(root, 'lib'));
 
 // Pack the release directory, exactly as semantic-release does.
 const pack = JSON.parse(
   run(
-    'npm',
-    ['pack', '--ignore-scripts', '--json', '--pack-destination', scratch],
+    [npmCli, 'pack', '--ignore-scripts', '--json', '--pack-destination', scratch],
     join(root, 'lib'),
   ),
 )[0];
@@ -41,7 +56,8 @@ console.log('PASS package layout: public entries present; internal chunk names m
 console.log('PASS natural declaration output: interfaces.d.ts');
 writeFileSync(join(scratch, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
 console.log(
-  run('npm', [
+  run([
+    npmCli,
     'install',
     '--ignore-scripts',
     '--no-save',
@@ -122,4 +138,4 @@ for (const [resolution, module] of [
 writeFileSync(join(scratch, 'timings.json'), JSON.stringify(timings, null, 2));
 console.log(`Package fixtures and timings: ${scratch}`);
 
-console.log(run(process.execPath, [join(root, 'scripts/check-readme.mjs'), scratch], root));
+console.log(run([join(root, 'scripts/check-readme.mjs'), scratch], root));
