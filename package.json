@@ -58,7 +58,7 @@
     "globals": "^17.12.0",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
+    "prettier": "^3.9.8",
     "react": "^19.3.0",
     "react-router": "^8.4.0",
     "rollup": "^4.21.2",
