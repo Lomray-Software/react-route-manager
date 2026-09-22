@@ -53,11 +53,9 @@ type TURLArgs<TParams> = {} extends TParams
   : [params: TParams, options?: IRouterUrlOptions];
 
 type OptionalFieldsOnly<T> = {
-  [K in keyof T as T[K] extends infer TUndef
-    ? TUndef extends undefined
-      ? K
-      : never
-    : never]: T[K];
+  [
+    K in keyof T as T[K] extends infer TUndef ? (TUndef extends undefined ? K : never) : never
+  ]: T[K];
 };
 
 type IsEnum<T> = T extends object ? T[keyof T] : T;
