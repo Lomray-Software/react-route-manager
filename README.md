@@ -22,6 +22,36 @@ npm i --save @lomray/react-route-manager
 
 The TypeScript declarations require TypeScript 5.0 or newer; supported React Router versions are `>=6.12.1`.
 
+## Minimal URL example
+
+Use this when an existing React Router application needs named, typed URL builders.
+It does not render a router, fetch data, or discover routes from files. Keep your
+React Router setup; this manager supplies its paths and navigation URLs.
+
+<!-- docs-test:example -->
+```typescript
+import { Manager } from '@lomray/react-route-manager';
+
+const manager = new Manager({
+  routes: {
+    users: {
+      url: '/users',
+      children: {
+        detail: { url: '/:id', params: { id: '' } },
+      },
+    },
+  },
+});
+
+console.log(manager.path('users.detail')); // ':id' (relative route fragment)
+console.log(manager.makeURL('users.detail', { id: 'alice' })); // '/users/alice'
+```
+
+This example is checked with release 2.0.1, React Router 7.9.0 and TypeScript 5.9.2.
+The declared React Router peer range is not a test matrix. If you change the
+manager's prefix per request, create a manager per request rather than sharing a
+mutable instance between requests.
+
 ## Usage
 
 The examples use React Router 7 or later. With React Router 6, import `Link` from

@@ -20,7 +20,7 @@ assert.equal(
   'The package must ship the current README.',
 );
 const examples = [...readme.matchAll(/```typescript(?: jsx)?\n([\s\S]*?)```/g)];
-assert.equal(examples.length, 2, 'Compile both README examples verbatim.');
+assert.equal(examples.length, 3, 'Compile all three README examples verbatim.');
 const files = examples.map(([, code], index) => {
   const file = join(scratch, `example-${index}.tsx`);
   writeFileSync(file, code);
@@ -67,4 +67,4 @@ execFileSync(
     stdio: 'pipe',
   },
 );
-console.log('PASS both README examples compile verbatim (strict, skipLibCheck=false)');
+console.log('PASS all three README examples compile verbatim (strict, skipLibCheck=false)');
