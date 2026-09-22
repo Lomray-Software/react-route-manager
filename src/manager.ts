@@ -116,7 +116,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
     route: TKey,
     ...args: TURLArgs<TRouteParams<TRoutesConfig, TKey>>
   ) => string = (route, ...[params, { hasDomain = false } = {}]) => {
-    const path = this.getRouteUrl(route as string, { isFullPath: true });
+    const path = this.getRouteUrl(route, { isFullPath: true });
 
     return this.formatURL(generatePath(path, params), hasDomain);
   };
@@ -139,7 +139,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
     route: TKey,
     options?: IRouteUrlOptions,
   ) => string = (route, { isFullPath = false, hasLeadingSlash = false } = {}) =>
-    this.getRouteUrl(route as string, { isFullPath, hasLeadingSlash });
+    this.getRouteUrl(route, { isFullPath, hasLeadingSlash });
 
   /**
    * Get static app URLs (without params)
@@ -150,7 +150,7 @@ class Manager<TRoutesConfig extends TRouterConfig> {
 
     Object.entries(routes).forEach(([key, value]) => {
       const routeKey = [route, key].filter(Boolean).join('.') as TRouteKeys<TRoutesConfig>;
-      const fullPath = this.getRouteUrl(routeKey as string, { isFullPath: true });
+      const fullPath = this.getRouteUrl(routeKey, { isFullPath: true });
       const hasParams = fullPath
         .split('/')
         .some((segment) => segment.startsWith(':') || segment === '*');
