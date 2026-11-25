@@ -25,6 +25,8 @@ export default [
       '@typescript-eslint/no-for-in-array': 'off',
       'unicorn/no-nested-ternary': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      // Relative imports carry an explicit .js extension (ESM style) that resolves to the .ts source.
+      'import-x/extensions': ['error', 'ignorePackages', { js: 'always', ts: 'never', tsx: 'never' }],
     },
   }),
   {
